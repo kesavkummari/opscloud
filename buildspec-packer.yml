@@ -16,7 +16,6 @@ phases:
       - curl -qL -o jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64 && chmod +x ./jq
       - mv jq /usr/local/bin 
       - pwd
-      - ls -lrt $CODEBUILD_SRC_DIR
       - cd $CODEBUILD_SRC_DIR/hcl-packer/
       - packer fix packer.pkr.json
       - packer validate packer.pkr.json
@@ -28,10 +27,8 @@ phases:
       - aws configure set aws_secret_access_key `jq -r '.SecretAccessKey' aws_credentials.json` 
       - aws configure set aws_session_token `jq -r '.Token' aws_credentials.json` 
       - cat aws_credentials.json
-      - ls -lrt $CODEBUILD_SRC_DIR
-      - cd $CODEBUILD_SRC_DIR/hcl-packer/
       - ls -lrt
-      - packer build $CODEBUILD_SRC_DIR/hcl-packer/packer.pkr.json
+      - packer build packer.pkr.json
   post_build:
     commands:
       - echo "Packer Job is completed on `date`"
